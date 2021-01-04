@@ -153,10 +153,10 @@ public class Application {
 
     @SuppressWarnings("empty-statement")
     public static void main(String args[]) throws Exception {
-//    	 cameraSerial = new SerialTest();//Port dieu khien camera
-//         carSerial = new RobotCommunication();//Port dieu khien xe
-//         carSerial.Init();
-//         cameraSerial.Init();
+    	 cameraSerial = new SerialTest();//Port dieu khien camera
+         carSerial = new RobotCommunication();//Port dieu khien xe
+         carSerial.Init();
+         cameraSerial.Init();
          
         WebSocketClient simpleWebSocketClient
                 = new StandardWebSocketClient();

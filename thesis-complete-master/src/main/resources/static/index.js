@@ -42,29 +42,18 @@ function disconnect() {
 
 function sendLeft() {
     if(y===true){
-    stompClient.send("/app/hello", {}, JSON.stringify('8101060115150103FF'));
-    setTimeout(function(){
-        stompClient.send("/app/hello", {}, JSON.stringify('8101060115150303FF'));
-    },x);}
+    stompClient.send("/app/hello", {}, JSON.stringify('left'));
+    }
 else{ 
     stompClient.send("/app/hello", {}, JSON.stringify('Xtrai'));
-    setTimeout(function(){
-        stompClient.send("/app/hello", {}, JSON.stringify('Xtrai'));
-    },x);}
 
 }
 
 function sendRight() {
     if(y===true){
-    stompClient.send("/app/hello", {}, JSON.stringify('8101060115150203FF'));
-    setTimeout(function(){
-        stompClient.send("/app/hello", {}, JSON.stringify('8101060115150303FF'));
-    },x);}
+    stompClient.send("/app/hello", {}, JSON.stringify('right'));}
 else{
     stompClient.send("/app/hello", {}, JSON.stringify('Xphai'));
-    setTimeout(function(){
-        stompClient.send("/app/hello", {}, JSON.stringify('Xphai'));
-    },x);}
 }
 
 function sendCenter() {
@@ -73,9 +62,6 @@ function sendCenter() {
 else{
     
     stompClient.send("/app/hello", {}, JSON.stringify('XStop'));
-    setTimeout(function(){
-        stompClient.send("/app/hello", {}, JSON.stringify('XStop'));
-    },x);
 }
 }
 
@@ -84,32 +70,23 @@ function sendUp() {
     // stompClient.send("/app/hello", {}, 'abc');
     if(y===true){
        
-    stompClient.send("/app/hello", {}, JSON.stringify('8101060115150301FF'));
-    setTimeout(function(){
-        stompClient.send("/app/hello", {}, JSON.stringify('8101060115150303FF'));
-    },x);}
+    stompClient.send("/app/hello", {}, JSON.stringify('forward'));}
 else{
     
     stompClient.send("/app/hello", {}, JSON.stringify('Xtoi'));
-    setTimeout(function(){
-        stompClient.send("/app/hello", {}, JSON.stringify('Xtoi'));
-    },x);
+ 
 }
 }
 
 function sendDown() {
     if(y===true){
     // stompClient.send("/app/hello", {}, 'abc');
-    stompClient.send("/app/hello", {}, JSON.stringify('8101060115150302FF'));;
-    setTimeout(function(){
-        stompClient.send("/app/hello", {}, JSON.stringify('8101060115150303FF'));
-    },x);}
+    stompClient.send("/app/hello", {}, JSON.stringify('backward'));;
+   }
 else{
     
     stompClient.send("/app/hello", {}, JSON.stringify('Xlui'));
-    setTimeout(function(){
-        stompClient.send("/app/hello", {}, JSON.stringify('Xlui'));
-    },x);
+   
 }}
 
 function sendZoomIn() {
