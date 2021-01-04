@@ -1,8 +1,13 @@
-
+<<<<<<< Updated upstream
 html,body
 {	
 	left: 0;
+	margin: 0;
+=======
+body
+{	left: 0;
   	margin: 0;
+>>>>>>> Stashed changes
 	height:100%;
     background: #999;
     
@@ -10,15 +15,19 @@ html,body
 
 #controller
 {
+<<<<<<< Updated upstream
   padding-top:50px;
+   
 }
 
 .controls {
 	position:absolute;
 	left:800px;
 	width: 190px;
+=======
     margin: 0 auto;
     width: 190px;
+>>>>>>> Stashed changes
     height: 440px;
     background: #000;
     background: -webkit-gradient(linear, left top, right top, color-stop(0%,#131313), color-stop(0%,#111111), color-stop(0%,#1c1c1c), color-stop(8%, #666561), color-stop(50%,#a59393), color-stop(92%,#595959), color-stop(100%,#000000), color-stop(100%,#4c4c4c));
@@ -30,7 +39,21 @@ html,body
     color: #eee;
     overflow:hidden;
 }
+<<<<<<< Updated upstream
+=======
 
+.controls {
+
+      overflow:hidden;
+}
+
+.stream
+{  
+  float:left;
+
+}
+
+>>>>>>> Stashed changes
 .button
 {
     float: left;
@@ -74,7 +97,14 @@ ins > span
 {
     background: azure!important;
 }
+<<<<<<< Updated upstream
 .stream{
 	position:absolute;
 	left:100px;
+=======
+#container{
+  margin: 0 auto;
+  width:600px;
+  padding-top:50px;
+>>>>>>> Stashed changes
 }

@@ -41,8 +41,8 @@ import java.util.Arrays;
 public class Application {
 
     static public String RX;
-    static private SerialTest main;
-    static private RobotCommunication main2;
+    static private SerialTest cameraSerial;
+    static private RobotCommunication carSerial;
 
     static public class MyStompSessionHandler
             extends StompSessionHandlerAdapter {
@@ -51,9 +51,10 @@ public class Application {
 
         public MyStompSessionHandler(String userId) {
             this.userId = userId;
-            main = new SerialTest();//Port dieu khien camera
-            main2 = new RobotCommunication();//Port dieu khien xe
-            main2.Init();
+//            cameraSerial = new SerialTest();//Port dieu khien camera
+//            carSerial = new RobotCommunication();//Port dieu khien xe
+//            carSerial.Init();
+//            cameraSerial.Init();
         }
 
         private void showHeaders(StompHeaders headers) {
@@ -94,46 +95,48 @@ public class Application {
 
                     
                     if (RX.charAt(0) != 'X') {
-                        try {
-                            SerialTest.hexStringToByteArray(RX);
-                        } catch (IOException e) {
-                            System.err.println("DAY lA LOI O HexString App");
-                        }
-
-                        try {
-                            main.sendSerial(SerialTest.data);
-                        } catch (IOException e) {
-                            System.err.println("DAY lA LOI O SendSerial APP");
-                        }
-                    } else {
-                        try {
-                            System.out.print("dieu khien xe");
-                            switch (RX) {
-                                case "Xtrai":
-                                    main2.run(MoveDirection.left);
-                                    System.out.println("Da dieu khien qua trai");
-                                    break;
-                                case "Xphai":
-                                    main2.run(MoveDirection.right);
-                                    break;
-                                case "Xtoi":
-                                    main2.run(MoveDirection.forward);
-                                    break;
-                                case "Xlui":
-                                    main2.run(MoveDirection.backward);
-                                    break;
-                                case "XStop":
-                                    main2.run(MoveDirection.stop);
-                                    
-                                    break;
-                            }
-                        } catch (Exception e) {
-                            System.out.print(e);
-                        }
-
+                        	System.out.println("Điều khiển camera");
+                        	switch (RX) {
+	                        	case "left":
+	                        		cameraSerial.run(CameraDirection.left);
+	                        		break;
+	                        	case "right":
+	                        		cameraSerial.run(CameraDirection.right);
+	                        		break;
+	                        	case "forward":
+	                        		cameraSerial.run(CameraDirection.forward);
+	                        		break;
+	                        	case "backward":
+	                        		cameraSerial.run(CameraDirection.backward);
+	                        		break;
+	                        	case "stop":
+	                        		cameraSerial.run(CameraDirection.stop);
+	                        		break;
+                        	}
+                        	} else {
+	                        	try {
+		                            System.out.print("dieu khien xe");
+		                            switch (RX) {
+		                                case "Xtrai":
+		                                    carSerial.run(CarDirection.left);
+		                                    break;
+		                                case "Xphai":
+		                                    carSerial.run(CarDirection.right);
+		                                    break;
+		                                case "Xtoi":
+		                                    carSerial.run(CarDirection.forward);
+		                                    break;
+		                                case "Xlui":
+		                                    carSerial.run(CarDirection.backward);
+		                                    break;
+		                                case "XStop":
+		                                    carSerial.run(CarDirection.stop);
+		                                    break;
+		                            }
+		                        } catch (Exception e) {
+		                            System.out.print(e);}
+	                        	}
                     }
-
-                }
             });
         }
 
@@ -150,11 +153,11 @@ public class Application {
 
     @SuppressWarnings("empty-statement")
     public static void main(String args[]) throws Exception {
-
-        /*SerialTest main= new SerialTest();
-        main.initialize();*/
-       RobotCommunication main2 = new RobotCommunication();
-
+//    	 cameraSerial = new SerialTest();//Port dieu khien camera
+//         carSerial = new RobotCommunication();//Port dieu khien xe
+//         carSerial.Init();
+//         cameraSerial.Init();
+         
         WebSocketClient simpleWebSocketClient
                 = new StandardWebSocketClient();
         List<Transport> transports = new ArrayList<>(1);
