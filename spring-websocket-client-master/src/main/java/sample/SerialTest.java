@@ -1,5 +1,9 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package sample;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -8,122 +12,172 @@ import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent; 
 import gnu.io.SerialPortEventListener; 
 import java.util.Enumeration;
-import java.io.IOException;
-import java.io.FileOutputStream;
-import java.math.BigInteger;
+import java.util.Scanner;
 
-public  class SerialTest implements SerialPortEventListener {
-	
-SerialPort serialPort;
-    /** The port we're normally going to use. */
-private static final String PORT_NAMES[] = {"COM9", // Mac OS X
-        									"/dev/ttyUSB0", // Linux
-        									"COM7", // Windows
-        									};
-
-private BufferedReader input;
-static OutputStream output;
-private static final int TIME_OUT = 2000;
-private static final int DATA_RATE = 9600;
-public static byte[] data;
-public synchronized static void hexStringToByteArray(String s) throws IOException{
-  
-    if(s!=null){
-    int len = s.length();
-     data = new byte[len / 2];
-    for (int i = 0; i < len; i += 2) {
-        data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                             + Character.digit(s.charAt(i+1), 16));
-    }
-    }
-    else
-            {
-                throw new IOException();
-            }
+enum CameraDirection {
+    forward,
+    backward,
+    left,
+    right,
+    forwardLeft,
+    forwardRight,
+    backwardLeft,
+    backwardRight,
+    stop
 }
 
-public void initialize() {
-    CommPortIdentifier portId = null;
-    Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
-    //First, Find an instance of serial port as set in PORT_NAMES.
-    while (portEnum.hasMoreElements()) {
-        CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
-        for (String portName : PORT_NAMES) {
-            if (currPortId.getName().equals(portName)) {
-                portId = currPortId;
-                System.out.println("COM port connected");
-                break;
-          
+public class SerialTest implements SerialPortEventListener {
+    SerialPort serialPort;
+    static public String RX;
+    /** The port we're normally going to use. */
+    private static final String PORT_NAMES[] = { 
+        "/dev/tty.usbserial-A9007UX1", // Mac OS X
+        "/dev/ttyACM0", // Raspberry Pi
+        "/dev/ttyUSB0", // Linux
+        "COM9", // Windows
+    };
+    /**
+     * A BufferedReader which will be fed by a InputStreamReader 
+     * converting the bytes into characters 
+     * making the displayed results codepage independent
+     */
+    private BufferedReader input;
+    /** The output stream to the port */
+    public OutputStream output;
+    /** Milliseconds to block while waiting for port open */
+    private static final int TIME_OUT = 2000;
+    /** Default bits per second for COM port. */
+    private static final int DATA_RATE = 9600;
+
+    public SerialTest() {}
+    public void Init() {
+        // the next line is for Raspberry Pi and 
+        // gets us into the while loop and was suggested here was suggested https://www.raspberrypi.org/phpBB3/viewtopic.php?f=81&t=32186
+        //System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyUSB0");
+        System.setProperty("gnu.io.rxtx.SerialPorts","COM9");
+
+        CommPortIdentifier portId = null;
+        Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
+
+        //First, Find an instance of serial port as set in PORT_NAMES.
+        while (portEnum.hasMoreElements()) {
+            CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
+            System.out.printf("Current port: %s", currPortId.getName());
+            for (String portName : PORT_NAMES) {
+                if (currPortId.getName().equals(portName)) {
+                    portId = currPortId;
+                    break;
+                }
             }
         }
-    }
-    if (portId == null) {
-        System.out.println("Could not find COM port.");
-        return;
-    }
+        if (portId == null) {
+            System.out.println("Could not find COM port.");
+            return;
+        }
 
-    try {
-        serialPort = (SerialPort) portId.open(this.getClass().getName(),
-                TIME_OUT);
-        serialPort.setSerialPortParams(DATA_RATE,
-                SerialPort.DATABITS_8,
-                SerialPort.STOPBITS_1,
-                SerialPort.PARITY_NONE);
-
-        // open the streams
-        input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
-        output = serialPort.getOutputStream();
-        serialPort.addEventListener(this);
-        serialPort.notifyOnDataAvailable(true);
-    } catch (Exception e) {
-        System.err.println(e.toString());
-    }
-}
-
-
-public synchronized void close() {
-    if (serialPort != null) {
-        serialPort.removeEventListener();
-        serialPort.close();
-    }
-}
-
-public synchronized void serialEvent(SerialPortEvent oEvent) {
-    if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
         try {
-            String inputLine=null;
-            if (input.ready()) {
-                inputLine = input.readLine();
-                
-                String [] chunks = inputLine.split(",");
-                
-                System.out.println(inputLine);
-                System.out.println(chunks[0] + "\t" + chunks[1] + "\t" + chunks[2] + "\t");
-            }
+            // open serial port, and use class name for the appName.
+            serialPort = (SerialPort) portId.open(this.getClass().getName(),
+                    TIME_OUT);
 
+            // set port parameters
+            serialPort.setSerialPortParams(DATA_RATE,
+                    SerialPort.DATABITS_8,
+                    SerialPort.STOPBITS_1,
+                    SerialPort.PARITY_NONE);
+
+            // open the streams
+            input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
+            output = serialPort.getOutputStream();
+            System.out.println("initzzzzzzzzzz");
+            // add event listeners
+            serialPort.addEventListener(this);
+            serialPort.notifyOnDataAvailable(true);
         } catch (Exception e) {
             System.err.println(e.toString());
         }
     }
-    // Ignore all the other eventTypes, but you should consider the other ones.
-}
-public synchronized  void sendSerial( byte[] data1) throws IOException 
-{
-    if(data1!=null){
-    try { 
-        
-        
-            output.write(data1);
-            output.flush();
-            System.out.println("da den day SerialTest");
-            
-    }
-    catch (IOException e) {
-            System.err.println("Day la loi o SerialTest");
+
+    /**
+     * This should be called when you stop using the port.
+     * This will prevent port locking on platforms like Linux.
+     */
+    public synchronized void close() {
+        if (serialPort != null) {
+            serialPort.removeEventListener();
+            serialPort.close();
         }
-}
-}
-public String toHex(String arg) {
-    return String.format("%x", new BigInteger(1, arg.getBytes(/*YOUR_CHARSET?*/)));
-}
+    }
+
+    /**
+     * Handle an event on the serial port. Read the data and print it.
+     */
+    public synchronized void serialEvent(SerialPortEvent oEvent) {
+        if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
+            try {
+                String inputLine=input.readLine();
+                System.out.printf("Receiv: %s%n", inputLine);
+            } catch (Exception e) {
+                System.err.println(e.toString());
+            }
+        }
+        // Ignore all the other eventTypes, but you should consider the other ones.
+    }
+
+    public void run(CameraDirection move) {
+        System.out.println("lenh quay trai ben code a Hung");
+        try {
+            switch (move)
+            {
+                case forward:
+                    this.output.write(String.valueOf("w").getBytes());
+                    break;
+
+                case backward:
+                    this.output.write(String.valueOf("s").getBytes());
+                    break;
+
+                case left:
+                    this.output.write(String.valueOf("a").getBytes());
+                    System.out.println("lenh quay trai ben code a Hung");
+                    break;
+
+                case right:
+                    this.output.write(String.valueOf("d").getBytes());
+                    break;
+
+                case forwardLeft:
+                    this.output.write(String.valueOf("q").getBytes());
+                    break;
+                
+                case forwardRight:
+                    this.output.write(String.valueOf("e").getBytes());
+                    break;
+                
+                case backwardLeft:
+                    this.output.write(String.valueOf("z").getBytes());
+                    break;
+                
+                case backwardRight:
+                    this.output.write(String.valueOf("c").getBytes());
+                    break;
+                
+                case stop:
+                    this.output.write(String.valueOf("s").getBytes());
+                    break;
+                    
+                    
+                 
+                default:
+                    break;
+            }
+        } 
+        catch (Exception e) {
+        System.out.print("=============");
+        System.out.print(e);
+        System.out.print("=============");
+        }
+    }
+
+   
 }

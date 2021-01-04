@@ -14,7 +14,7 @@ import gnu.io.SerialPortEventListener;
 import java.util.Enumeration;
 import java.util.Scanner;
 
-enum MoveDirection {
+enum CarDirection {
     forward,
     backward,
     left,
@@ -126,7 +126,7 @@ public class RobotCommunication implements SerialPortEventListener {
         // Ignore all the other eventTypes, but you should consider the other ones.
     }
 
-    public void run(MoveDirection move) {
+    public void run(CarDirection move) {
         System.out.println("lenh quay trai ben code a Hung");
         try {
             switch (move)
