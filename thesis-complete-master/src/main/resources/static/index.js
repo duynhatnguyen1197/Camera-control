@@ -8,6 +8,7 @@
 var stompClient = null;
 var x = 1500;
 var y=true;
+var capture=false;
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
@@ -48,6 +49,7 @@ else{
     stompClient.send("/app/hello", {}, JSON.stringify('Xtrai'));
 
 }
+}
 
 function sendRight() {
     if(y===true){
@@ -55,7 +57,7 @@ function sendRight() {
 else{
     stompClient.send("/app/hello", {}, JSON.stringify('Xphai'));
 }
-
+}
 function sendCenter() {
     if(y===true){
     stompClient.send("/app/hello", {}, JSON.stringify('81010604FF'));}
@@ -107,6 +109,18 @@ function sendStop() {
 function sendMode1() {
     // stompClient.send("/app/hello", {}, 'abc');
     stompClient.send("/app/hello", {}, JSON.stringify('8101060115150303FF'));
+    window.onload = function() {
+    	capture = true;
+    	var canvas = document.createElement('canvas');
+		canvas.width = 640;
+		canvas.height = 480;
+		var ctx = canvas.getContext('2d');
+    	ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    	var dataURI = canvas.toDataURL('image/jpeg');
+    	myImage.src = dataURI;
+    	window.alert("Picture taken");
+    document.getElementById("capture").innerHTML=capture;
+ } 
 }
 
 function sendMode2() {
@@ -143,7 +157,7 @@ $(function () {
     $( "#ZoomOut" ).click(function() { sendZoomOut();});
     $( "#Center" ).click(function() { sendCenter();});
     $( "#Stop" ).click(function() { sendStop(); });
-    $( "#Mode1" ).click(function() { x=300; });
+    $( "#Mode1" ).click(function() { sendMode1(); });
     $( "#Mode2" ).click(function() { x=500; });
     $( "#Mode3" ).click(function() { x=1000; });
     $( "#STOP" ).click(function() {sendSTOP();});
