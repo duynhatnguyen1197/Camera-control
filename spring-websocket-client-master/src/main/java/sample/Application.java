@@ -146,14 +146,17 @@ public class Application {
                                 System.out.println("Image Captured");
                                 break;
                             case "Cstream1":
-                                bashCommand.executeCommand("ffmpeg -f v4l2 -framerate 40 -s 640x480 -t 00:10:00 -i /dev/video0 -f mpegts -codec:v mpeg1video "
-                                        + "-s 640x480 -b:v 1000k -bf 0 http:35.240.243.145:8082/bigbangboom");
+                                bashCommand.executeCommand("ffmpeg -f v4l2 -framerate 60 -s 640x480 -t 00:10:00 -i /dev/video0 -f mpegts -codec:v mpeg1video "
+                                        + "-s 640x480 -b:v 1000k -bf 0 http:35.240.243.145:8082/bigbangboom&");
                                 break;
                             case "Cstream2":
+                                bashCommand.executeCommand("ffmpeg -f v4l2 -framerate 40 -s 640x480 -t 00:10:00 -i /dev/video0 -f mpegts -codec:v mpeg1video "
+                                        + "-s 640x480 -b:v 1000k -bf 0 http:35.240.243.145:8082/bigbangboom&");
                                 break;
                             case "Cstream3":
                                 break;
                             case "Cstop-stream":
+                                bashCommand.executeCommand("killall ffmpeg");    
                                 break;
                         }
                     }
