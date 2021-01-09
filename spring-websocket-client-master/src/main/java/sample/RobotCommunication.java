@@ -127,7 +127,6 @@ public class RobotCommunication implements SerialPortEventListener {
     }
 
     public void run(CarDirection move) {
-        System.out.println("lenh quay trai ben code a Hung");
         try {
             switch (move)
             {

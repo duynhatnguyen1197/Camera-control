@@ -108,29 +108,22 @@ function sendStop() {
 
 function sendMode1() {
     // stompClient.send("/app/hello", {}, 'abc');
-    stompClient.send("/app/hello", {}, JSON.stringify('8101060115150303FF'));
+    stompClient.send("/app/hello", {}, JSON.stringify('Ccapture'));
     window.onload = function() {
-    	capture = true;
-    	var canvas = document.createElement('canvas');
-		canvas.width = 640;
-		canvas.height = 480;
-		var ctx = canvas.getContext('2d');
-    	ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    	var dataURI = canvas.toDataURL('image/jpeg');
-    	myImage.src = dataURI;
-    	window.alert("Picture taken");
+    	
+    	
     document.getElementById("capture").innerHTML=capture;
  } 
 }
 
 function sendMode2() {
     // stompClient.send("/app/hello", {}, 'abc');
-    stompClient.send("/app/hello", {}, JSON.stringify('8101060115150303FF'));
+    stompClient.send("/app/hello", {}, JSON.stringify('Cstream1'));
 }
 
 function sendMode3() {
     // stompClient.send("/app/hello", {}, 'abc');
-    stompClient.send("/app/hello", {}, JSON.stringify('8101060115150303FF'));
+    stompClient.send("/app/hello", {}, JSON.stringify('Cstream2'));
 }
 
 function showGreeting(message) {
@@ -157,9 +150,9 @@ $(function () {
     $( "#ZoomOut" ).click(function() { sendZoomOut();});
     $( "#Center" ).click(function() { sendCenter();});
     $( "#Stop" ).click(function() { sendStop(); });
-    $( "#Mode1" ).click(function() { sendMode1(); });
-    $( "#Mode2" ).click(function() { x=500; });
-    $( "#Mode3" ).click(function() { x=1000; });
+    $( "#Mode1" ).click(function() { sendMode1();});
+    $( "#Mode2" ).click(function() { sendMode2(); });
+    $( "#Mode3" ).click(function() { sendMode3(); });
     $( "#STOP" ).click(function() {sendSTOP();});
 });
 

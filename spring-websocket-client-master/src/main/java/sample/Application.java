@@ -43,7 +43,7 @@ public class Application {
     static public String RX;
     static private SerialTest cameraSerial;
     static private RobotCommunication carSerial;
-
+    static private ExecuteBashCommand bashCommand;
     static public class MyStompSessionHandler
             extends StompSessionHandlerAdapter {
 
@@ -92,7 +92,7 @@ public class Application {
                     System.err.println(payload.toString());
                     ServerMessage RXTX = (ServerMessage) payload;
                     RX = RXTX.getContent();
-
+                   
                     
                     if (RX.charAt(0) != 'X') {
                         	System.out.println("Điều khiển camera");
@@ -136,6 +136,27 @@ public class Application {
 		                        } catch (Exception e) {
 		                            System.out.print(e);}
 	                        	}
+                    if (RX.charAt(0) == 'C')
+                    {
+                        
+                        System.out.println("Command");
+                        switch(RX){
+                            case "Ccapture":
+                                bashCommand.executeCommand("raspistill -vf -hf -o /home/pi/Documents/1.jpg");
+                                System.out.println("Image Captured");
+                                break;
+                            case "Cstream1":
+                                bashCommand.executeCommand("ffmpeg -f v4l2 -framerate 40 -s 640x480 -t 00:10:00 -i /dev/video0 -f mpegts -codec:v mpeg1video "
+                                        + "-s 640x480 -b:v 1000k -bf 0 http:35.240.243.145:8082/bigbangboom");
+                                break;
+                            case "Cstream2":
+                                break;
+                            case "Cstream3":
+                                break;
+                            case "Cstop-stream":
+                                break;
+                        }
+                    }
                     }
             });
         }
@@ -155,6 +176,7 @@ public class Application {
     public static void main(String args[]) throws Exception {
     	 cameraSerial = new SerialTest();//Port dieu khien camera
          carSerial = new RobotCommunication();//Port dieu khien xe
+         bashCommand = new ExecuteBashCommand();
          carSerial.Init();
          cameraSerial.Init();
          
