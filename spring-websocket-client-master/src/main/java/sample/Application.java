@@ -135,6 +135,7 @@ public class Application  {
                                             break;
 		                            }
                      if("Cstream1".equals(RX)){
+                         streamVideo = new StreamVideo("stream");
                          streamVideo.start();
                      }
                     if("Cstop".equals(RX)){
@@ -165,11 +166,6 @@ public class Application  {
          bashCommand = new ExecuteBashCommand();
          carSerial.Init();
          cameraSerial.Init();
-         control = new ControlModule("control");
-         streamVideo = new StreamVideo("stream");
-       
-
-         
         WebSocketClient simpleWebSocketClient
                 = new StandardWebSocketClient();
         List<Transport> transports = new ArrayList<>(1);
