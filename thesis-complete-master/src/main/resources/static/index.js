@@ -103,7 +103,7 @@ function sendZoomOut() {
 
 function sendStop() {
     // stompClient.send("/app/hello", {}, 'abc');
-    stompClient.send("/app/hello", {}, JSON.stringify('Cstop-stream'));
+    stompClient.send("/app/hello", {}, JSON.stringify('Cstop'));
 }
 
 function sendMode1() {

@@ -38,12 +38,14 @@ import java.util.Arrays;
  *
  * @Author Jay Sridhar
  */
-public class Application {
-
+public class Application  {
+    public Application(){}
     static public String RX;
     static private SerialTest cameraSerial;
     static private RobotCommunication carSerial;
     static private ExecuteBashCommand bashCommand;
+    static private ControlModule control;
+    static private StreamVideo streamVideo;
     static public class MyStompSessionHandler
             extends StompSessionHandlerAdapter {
 
@@ -92,16 +94,13 @@ public class Application {
                     System.err.println(payload.toString());
                     ServerMessage RXTX = (ServerMessage) payload;
                     RX = RXTX.getContent();
-                   
-                    
-                    if (RX.charAt(0) != 'X') {
-                        	System.out.println("Điều khiển camera");
-                        	switch (RX) {
+                     switch (RX) {
 	                        	case "left":
 	                        		cameraSerial.run(CameraDirection.left);
 	                        		break;
 	                        	case "right":
 	                        		cameraSerial.run(CameraDirection.right);
+                                                System.out.println("Camera move right");
 	                        		break;
 	                        	case "forward":
 	                        		cameraSerial.run(CameraDirection.forward);
@@ -112,54 +111,38 @@ public class Application {
 	                        	case "stop":
 	                        		cameraSerial.run(CameraDirection.stop);
 	                        		break;
-                        	}
-                        	} else {
-	                        	try {
-		                            System.out.print("dieu khien xe");
-		                            switch (RX) {
-		                                case "Xtrai":
-		                                    carSerial.run(CarDirection.left);
-		                                    break;
-		                                case "Xphai":
-		                                    carSerial.run(CarDirection.right);
-		                                    break;
-		                                case "Xtoi":
-		                                    carSerial.run(CarDirection.forward);
-		                                    break;
-		                                case "Xlui":
-		                                    carSerial.run(CarDirection.backward);
-		                                    break;
-		                                case "XStop":
-		                                    carSerial.run(CarDirection.stop);
-		                                    break;
+		                        case "Xtrai":
+		                                carSerial.run(CarDirection.left);
+		                                break;
+		                        case "Xphai":
+		                                carSerial.run(CarDirection.right);
+                                               System.out.println("Car move right");
+		                                break;
+		                        case "Xtoi":
+		                                carSerial.run(CarDirection.forward);
+		                                break;
+		                        case "Xlui":
+		                                carSerial.run(CarDirection.backward);
+		                                break;
+		                        case "XStop":
+		                                carSerial.run(CarDirection.stop);
+		                                break;
+                                        case "Ccapture":
+                                             bashCommand.executeCommand("raspistill -vf -hf -o /home/pi/Documents/1.jpg");
+                                             System.out.println("Image Captured");
+                                             break;
+                                        default:
+                                            break;
 		                            }
-		                        } catch (Exception e) {
-		                            System.out.print(e);}
-	                        	}
-                    if (RX.charAt(0) == 'C')
-                    {
+                     if("Cstream1".equals(RX)){
+                         streamVideo.start();
+                     }
+                    if("Cstop".equals(RX)){
+                        bashCommand.executeCommand("killall ffmpeg");
+                        streamVideo.stop();
                         
-                        System.out.println("Command");
-                        switch(RX){
-                            case "Ccapture":
-                                bashCommand.executeCommand("raspistill -vf -hf -o /home/pi/Documents/1.jpg");
-                                System.out.println("Image Captured");
-                                break;
-                            case "Cstream1":
-                                bashCommand.executeCommand("ffmpeg -f v4l2 -framerate 60 -s 640x480 -t 00:10:00 -i /dev/video0 -f mpegts -codec:v mpeg1video "
-                                        + "-s 640x480 -b:v 1000k -bf 0 http:35.240.243.145:8082/bigbangboom&");
-                                break;
-                            case "Cstream2":
-                                bashCommand.executeCommand("ffmpeg -f v4l2 -framerate 40 -s 640x480 -t 00:10:00 -i /dev/video0 -f mpegts -codec:v mpeg1video "
-                                        + "-s 640x480 -b:v 1000k -bf 0 http:35.240.243.145:8082/bigbangboom&");
-                                break;
-                            case "Cstream3":
-                                break;
-                            case "Cstop-stream":
-                                bashCommand.executeCommand("killall ffmpeg");    
-                                break;
-                        }
                     }
+                  
                     }
             });
         }
@@ -182,6 +165,10 @@ public class Application {
          bashCommand = new ExecuteBashCommand();
          carSerial.Init();
          cameraSerial.Init();
+         control = new ControlModule("control");
+         streamVideo = new StreamVideo("stream");
+       
+
          
         WebSocketClient simpleWebSocketClient
                 = new StandardWebSocketClient();
