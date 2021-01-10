@@ -54,7 +54,7 @@ public class SerialTest implements SerialPortEventListener {
         // the next line is for Raspberry Pi and 
         // gets us into the while loop and was suggested here was suggested https://www.raspberrypi.org/phpBB3/viewtopic.php?f=81&t=32186
         //System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyUSB0");
-        System.setProperty("gnu.io.rxtx.SerialPorts","COM9");
+        System.setProperty("gnu.io.rxtx.SerialPorts","/dev/ttyACM0");
 
         CommPortIdentifier portId = null;
         Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
@@ -125,7 +125,6 @@ public class SerialTest implements SerialPortEventListener {
     }
 
     public void run(CameraDirection move) {
-        System.out.println("lenh quay trai ben code a Hung");
         try {
             switch (move)
             {

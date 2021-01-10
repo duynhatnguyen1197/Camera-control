@@ -28,11 +28,7 @@ public class ExecuteBashCommand {
 
     } catch (Exception e) {
         e.printStackTrace();
-    }
-
-
-}
-
+    }}
 }
     
 
