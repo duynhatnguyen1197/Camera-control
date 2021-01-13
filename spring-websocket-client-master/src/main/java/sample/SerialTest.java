@@ -54,7 +54,7 @@ public class SerialTest implements SerialPortEventListener {
         // the next line is for Raspberry Pi and 
         // gets us into the while loop and was suggested here was suggested https://www.raspberrypi.org/phpBB3/viewtopic.php?f=81&t=32186
         //System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyUSB0");
-        System.setProperty("gnu.io.rxtx.SerialPorts","/dev/ttyACM0");
+        System.setProperty("gnu.io.rxtx.SerialPorts","/dev/ttyUSB0");
 
         CommPortIdentifier portId = null;
         Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
@@ -71,7 +71,7 @@ public class SerialTest implements SerialPortEventListener {
             }
         }
         if (portId == null) {
-            System.out.println("Could not find COM port.");
+            System.out.println("Could not find COM port of camera.");
             return;
         }
 
@@ -138,7 +138,6 @@ public class SerialTest implements SerialPortEventListener {
 
                 case left:
                     this.output.write(String.valueOf("a").getBytes());
-                    System.out.println("lenh quay trai ben code a Hung");
                     break;
 
                 case right:

@@ -135,7 +135,11 @@ public class Application  {
                                             break;
 		                            }
                      if("Cstream1".equals(RX)){
-                         streamVideo = new StreamVideo("stream");
+                         streamVideo = new StreamVideo("18");
+                         streamVideo.start();
+                     }
+                     if("Cstream2".equals(RX)){
+                         streamVideo = new StreamVideo("0");
                          streamVideo.start();
                      }
                     if("Cstop".equals(RX)){
