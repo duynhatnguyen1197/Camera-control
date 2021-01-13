@@ -93,12 +93,12 @@ else{
 
 function sendZoomIn() {
     // stompClient.send("/app/hello", {}, 'abc');
-    stompClient.send("/app/hello", {}, JSON.stringify('left'));
+    stompClient.send("/app/hello", {}, JSON.stringify('zoomin'));
 }
 
 function sendZoomOut() {
     // stompClient.send("/app/hello", {}, 'abc');
-    stompClient.send("/app/hello", {}, JSON.stringify('left'));
+    stompClient.send("/app/hello", {}, JSON.stringify('zoomout'));
 }
 
 function sendStop() {
@@ -131,7 +131,10 @@ function showGreeting(message) {
 }
 function sendSTOP() {
     // stompClient.send("/app/hello", {}, 'abc');
-    stompClient.send("/app/hello", {}, JSON.stringify('XStop'));
+    if(y==true)
+        stompClient.send("/app/hello", {}, JSON.stringify('Camera Control'));
+    else
+        stompClient.send("/app/hello", {}, JSON.stringify('Car Control'));
     y=!y;
     return y;
 }
@@ -144,8 +147,8 @@ $(function () {
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#right" ).click(function(){sendRight();});
     $( "#left" ).click(function(){sendLeft();});
-    $( "#Up" ).click(function() { sendUp;});
-    $( "#Down" ).click(function(){sendDown;});
+    $( "#Up" ).click(function() { sendUp();});
+    $( "#Down" ).click(function(){sendDown();});
     $( "#ZoomIn" ).click(function() { sendZoomIn();});
     $( "#ZoomOut" ).click(function() { sendZoomOut();});
     $( "#Center" ).click(function() { sendCenter();});
